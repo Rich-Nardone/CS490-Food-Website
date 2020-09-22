@@ -1,0 +1,5 @@
+Flask
+tweepy
+python-dotenv
+random
+json
