@@ -3,6 +3,7 @@ import os
 import flask
 import random
 import json
+import datetime
 
 from os.path import join, dirname
 from dotenv import load_dotenv
@@ -28,23 +29,26 @@ def index():
     
     query = food_items[random.randint(0,7)]
     results = getTweets(query, 3)
-    print(results[0])
-    print()
-    print(results[1])
     return flask.render_template(
         "index.html",
-        Results = results
+        Results = results,
+        list_len = 3
         )
         
         
 def getTweets(query, count):
-    response = api.search(query, count = count)
+    response = api.search(query, count = count, show_user = True, lang = "en")
     tweets = []
     for tweet in response:
-        tweets.append(tweet.text + '\nTweeted at:' + str(tweet.created_at))
-        
+        time = getTime(tweet.created_at)
+        tweets.append(str(tweet.user.name) + ' tweeted: "' + tweet.text + '" at: ' +str(tweet.created_at.month) +' '+str(tweet.created_at.day)+', '+str(tweet.created_at.year)+', '+time)
     return tweets
     
+def getTime(time):
+    hour = str((time.hour - 4) % 12)
+    minute = str(time.minute)
+    second = str(time.second)
+    return (hour+':'+minute+':'+second+' EST' )
     
 app.run(
     port = int(os.getenv("PORT", 8080)),   

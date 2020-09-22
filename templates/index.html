@@ -6,6 +6,11 @@
     </head>
     <body>
         <h1>Spoonacular Review</h1>
-        <h3>{{ Results }}</h3>
+        <ol>
+            {% for i in range(0, list_len) %}
+                <li>{{ Results[i] }}</li>
+                <hr>
+            {% endfor %}
+        </ol>
     </body>
 </html>
