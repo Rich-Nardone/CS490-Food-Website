@@ -1,17 +1,20 @@
 body{
-    font-family: "Roboto Slab";
+    font-family: 'Roboto', sans-serif;
     font-size: 28px;
-    background-color: #0066cc;
+    background-color: green;
     text-align: center;
-}
-
-#description{
-    font-size: 25px;
 }
 
 ol{ 
     font-size: 18px;
-    background-color: #f0ebf8;
-    font-family: cursive;
+    background-color: green;
+    font-family: 'Roboto', sans-serif;
     text-align: left;
+}
+
+hr{
+    color: black;
+    background-color: black;
+    width:50%;
+    text-align:center;
 }

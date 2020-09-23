@@ -1,16 +1,22 @@
 <html>
     <head>
         <title>Spoonacular Review</title>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Caveat Brush">
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet">
         <link rel="stylesheet" href={{ url_for("static", filename="styles.css") }} >
     </head>
     <body>
         <h1>Spoonacular Review</h1>
         <ol>
             {% for i in range(0, list_len) %}
-                <li>{{ Results[i] }}</li>
+                <li>{{ Users[i] }} tweeted:  </li>
+                <ol>"{{ Texts[i] }}"</ol>
+                <ol> on {{ Times[i] }}</ol>                
                 <hr>
             {% endfor %}
         </ol>
     </body>
+    <footer> 
+        <h4> Created by Richard Nardone </h4>
+        <h5>Utilized Heroku, Twitter API and Spoonacular API</h5>
+    </footer>
 </html>
