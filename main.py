@@ -32,11 +32,6 @@ surl = "https://api.spoonacular.com/recipes/complexSearch?apiKey={}".format(spoo
 #Set of cuisines for complexSearch
 state = ['Italian','Chinese','Mexican','German','Indian','Japanese','French']
 
-#
-response = requests.get(surl+"&cuisine="+state[random.randint(0,6)]+"&addRecipeInformation=true")
-json_body = response.json()
-recipeID = json.dumps(json_body["results"][0]["id"])
-
 
 @app.route('/')
 def index():
@@ -45,6 +40,7 @@ def index():
     query = state[rnum]
     response = requests.get(surl+"&cuisine="+state[rnum]+"&addRecipeInformation=true")
     json_body = response.json()
+    url = (json.dumps(json_body["results"][0]["image"])).replace("\"","")
     recipeID = json.dumps(json_body["results"][0]["id"])
     ingredients = getIngredients(recipeID)
     results = getTweets(query, count)
@@ -57,6 +53,7 @@ def index():
         Users = users,
         Times = times,
         list_len = count,
+        Url = url,
         Ingredients = ingredients,
         ilen = len(ingredients)
         )
@@ -100,11 +97,12 @@ def getIngredients(ID):
     json_body = response.json()
     ingredients = []
     for i in range(0,len(json_body["ingredients"])):
-        ingredients.append(json.dumps(json_body["ingredients"][i]["name"]))
+        ingre = json.dumps(json_body["ingredients"][i]["name"])
+        ingre = ingre.replace("\"","")
+        ingredients.append(ingre)
         
     return ingredients
-    
-print(getIngredients(recipeID))
+
 app.run(
     port = int(os.getenv("PORT", 8080)),   
     host = os.getenv("IP", "0.0.0.0")
