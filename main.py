@@ -36,9 +36,9 @@ state = ['Italian','Chinese','Mexican','German','Indian','Japanese','French']
 @app.route('/')
 def index():
     rnum = random.randint(0,6)
-    count = 5
+    count = 1
     query = state[rnum]
-    response = requests.get(surl+"&cuisine="+state[rnum]+"&addRecipeInformation=true")
+    response = requests.get(surl+"&cuisine="+query+"&addRecipeInformation=true")
     json_body = response.json()
     url = (json.dumps(json_body["results"][0]["image"])).replace("\"","")
     recipeID = json.dumps(json_body["results"][0]["id"])
@@ -59,7 +59,7 @@ def index():
         )
         
 def getTweets(query, count):
-    response = api.search(query, count = count, show_user = True, lang = "en")
+    response = api.search(query, count = 1, show_user = True, lang = "en")
     tweets = []
     for tweet in response:
         tweets.append(tweet)
@@ -73,8 +73,10 @@ def getUsers(results):
     
 def getTexts(results):
     tweets = []
+    
     for tweet in results:
-        tweets.append(tweet.text)
+        status = api.get_status(tweet.id_str, tweet_mode="extended")
+        tweets.append(status.full_text)
     return tweets
 
 def getTimes(results):
