@@ -30,30 +30,37 @@ spoonacular_key = os.environ['SPOON_KEY']
 surl = "https://api.spoonacular.com/recipes/complexSearch?apiKey={}".format(spoonacular_key)
 
 #Set of cuisines for complexSearch
-state = ['Italian','Chinese','Mexican','German','Indian','Japanese','French']
+state = ['Italian','Chinese','Mexican','Greek','Indian','Japanese','Thai','Cajun','Caribbean','Irish','Korean']
 
 
 @app.route('/')
 def index():
-    rnum = random.randint(0,6)
+    rnum = random.randint(0,8)
+    randnum = random.randint(0,19) 
     count = 1
-    query = state[rnum]
-    response = requests.get(surl+"&cuisine="+query+"&addRecipeInformation=true")
+    cuisine = state[rnum]
+    response = requests.get(surl+"&cuisine="+state[rnum]+"&addRecipeInformation=true&number=20")
     json_body = response.json()
-    url = (json.dumps(json_body["results"][0]["image"])).replace("\"","")
-    recipeID = json.dumps(json_body["results"][0]["id"])
+    url = (json.dumps(json_body["results"][randnum]["image"])).replace("\"","")
+    recipeID = json.dumps(json_body["results"][randnum]["id"])
     ingredients = getIngredients(recipeID)
+    Query = json.dumps(json_body["results"][randnum]["title"]).replace("\"","")
+    query = cuisine+" cuisine OR food OR snack"
     results = getTweets(query, count)
     texts = getTexts(results)
     times = getTimes(results)
     users = getUsers(results)
+    #urls = getUrls(results)
     return flask.render_template(
         "index.html",
         Texts = texts,
         Users = users,
         Times = times,
+        #Urls = urls,
+        Cuisine = cuisine,
+        Recipe = Query,
         list_len = count,
-        Url = url,
+        ImageUrl = url,
         Ingredients = ingredients,
         ilen = len(ingredients)
         )
@@ -73,12 +80,11 @@ def getUsers(results):
     
 def getTexts(results):
     tweets = []
-    
     for tweet in results:
         status = api.get_status(tweet.id_str, tweet_mode="extended")
         tweets.append(status.full_text)
     return tweets
-
+    
 def getTimes(results):
     times = []
     for tweet in results:
