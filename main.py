@@ -23,7 +23,7 @@ access_token_secret = os.getenv("TOKEN_SECRET")
 #OAuth for Twitter API
 auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_token_secret)
-api = tweepy.API(auth)
+api = tweepy.API(auth, wait_on_rate_limit=True)
 
 #Set Spoonacular API key to local variable and set url
 spoonacular_key = os.environ['SPOON_KEY']
@@ -50,17 +50,25 @@ def index():
             break
     recipeID = json.dumps(json_body["results"][randnum]["id"])
     ingredients = getIngredients(recipeID)
+    serving = json.dumps(json_body["results"][randnum]["servings"])
+    readyTime = json.dumps(json_body["results"][randnum]["readyInMinutes"])
+    spoonUrl = json.dumps(json_body["results"][randnum]["spoonacularSourceUrl"])
     Query = json.dumps(json_body["results"][randnum]["title"]).replace("\"","")
     query = cuisine+" cuisine OR food OR snack -filter:retweets"
     results = getTweets(query, count)
     return flask.render_template(
         "index.html",
+        #Tweet variables
         Texts = getTexts(results),
         Users = getUsers(results),
         Times = getTimes(results),
-        Cuisine = cuisine,
-        Recipe = Query,
         list_len = count,
+        #Spoonacular variables
+        Cuisine = cuisine,
+        SpoonUrl = spoonUrl,
+        Recipe = Query,
+        Servings = serving,
+        ReadyTime = readyTime,
         ImageUrl = url,
         Ingredients = ingredients,
         ilen = len(ingredients)
@@ -68,12 +76,9 @@ def index():
         
 def getTweets(query, count):
     tweets = []
-    while True:
-        response = api.search(query, count = 1, show_user = True, result_type = "popular",lang = "en")
-        for tweet in response:
-            tweets.append(tweet)
-        if tweets != []:
-            break
+    response = api.search(query, count = 1, show_user = True, result_type = "recent",lang = "en")
+    for tweet in response:
+        tweets.append(tweet)
     return tweets
 
 def getUsers(results):
