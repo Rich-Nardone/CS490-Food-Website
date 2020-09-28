@@ -50,11 +50,8 @@ def index():
             break
     recipeID = json.dumps(json_body["results"][randnum]["id"])
     ingredients = getIngredients(recipeID)
-    serving = json.dumps(json_body["results"][randnum]["servings"])
-    readyTime = json.dumps(json_body["results"][randnum]["readyInMinutes"])
-    spoonUrl = json.dumps(json_body["results"][randnum]["spoonacularSourceUrl"])
-    Query = json.dumps(json_body["results"][randnum]["title"]).replace("\"","")
-    query = getQuery(cuisine, Query)
+    title = json.dumps(json_body["results"][randnum]["title"]).replace("\"","")
+    query = getQuery(cuisine, title)
     results = getTweets(query, count)
     return flask.render_template(
         "index.html",
@@ -64,19 +61,21 @@ def index():
         Times = getTimes(results),
         list_len = count,
         #Spoonacular variables
+        
         Cuisine = cuisine,
-        SpoonUrl = spoonUrl,
-        Recipe = Query,
-        Servings = serving,
-        ReadyTime = readyTime,
-        ImageUrl = url,
+        SpoonUrl = json.dumps(json_body["results"][randnum]["spoonacularSourceUrl"]),
+        Recipe = json.dumps(json_body["results"][randnum]["title"]).replace("\"",""),
+        Servings = json.dumps(json_body["results"][randnum]["servings"]),
+        ReadyTime = json.dumps(json_body["results"][randnum]["readyInMinutes"]),
+        ImageUrl = (json.dumps(json_body["results"][randnum]["image"])).replace("\"",""),
         Ingredients = ingredients,
         ilen = len(ingredients)
         )
 
+
 def getQuery(cuisine, title):
     title = title.replace(" ", " OR ")
-    query = cuisine+" food OR food OR cuisine OR "+title
+    query = cuisine+" food OR "+title
     return query
 
 def getTweets(query, count):

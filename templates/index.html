@@ -8,10 +8,11 @@
         <h1>Spoonacular Review</h1>
         <h2>Cuisine: {{ Cuisine }}</h2>
         <h2>Recipe: {{ Recipe }}</h2>
-        <h2>Link: {{ SpoonUrl }}</h2>
         <h2>ReadyTime: {{ ReadyTime }}</h2>
         <h2>Servings: {{ Servings }}</h2>
+        <a href={{ SpoonUrl }}>
         <img src={{ ImageUrl }} alt="food" />
+        </a>
         <ol>
             {% for i in range(0, list_len) %}
                 <li>{{ Users[i] }} tweeted:  </li>
