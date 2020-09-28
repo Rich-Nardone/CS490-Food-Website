@@ -74,3 +74,6 @@ Issues I am still having with this app:
 	2. I am also having trouble navigating the tweepy api responses. I need to read the documentation on how to get the full tweet text adn I would like to have
 	   a better understanding of the contents of the JSON response so I can add more information about the tweet like a geotag. This will require me to just read
 	   more documentation and experiment.
+
+test
+test
