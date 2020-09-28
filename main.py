@@ -54,7 +54,7 @@ def index():
     readyTime = json.dumps(json_body["results"][randnum]["readyInMinutes"])
     spoonUrl = json.dumps(json_body["results"][randnum]["spoonacularSourceUrl"])
     Query = json.dumps(json_body["results"][randnum]["title"]).replace("\"","")
-    query = cuisine+" cuisine OR food OR snack -filter:retweets"
+    query = getQuery(cuisine, Query)
     results = getTweets(query, count)
     return flask.render_template(
         "index.html",
@@ -73,7 +73,12 @@ def index():
         Ingredients = ingredients,
         ilen = len(ingredients)
         )
-        
+
+def getQuery(cuisine, title):
+    title = title.replace(" ", " OR ")
+    query = cuisine+" food OR food OR cuisine OR "+title
+    return query
+
 def getTweets(query, count):
     tweets = []
     response = api.search(query, count = 1, show_user = True, result_type = "recent",lang = "en")
