@@ -67,10 +67,13 @@ def index():
         )
         
 def getTweets(query, count):
-    response = api.search(query, count = 1, show_user = True, result_type = "popular",lang = "en")
     tweets = []
-    for tweet in response:
-        tweets.append(tweet)
+    while True:
+        response = api.search(query, count = 1, show_user = True, result_type = "popular",lang = "en")
+        for tweet in response:
+            tweets.append(tweet)
+        if tweets != []:
+            break
     return tweets
 
 def getUsers(results):
