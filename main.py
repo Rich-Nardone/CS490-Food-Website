@@ -36,7 +36,7 @@ state = ['Italian','Chinese','Mexican','Greek','Indian','Japanese','Thai','Cajun
 @app.route('/')
 def index():
     rnum = random.randint(0,8)
-    count = 1
+    count = 3
     cuisine = state[rnum]
     response = requests.get(surl+"&cuisine="+state[rnum]+"&addRecipeInformation=true&number=20")
     json_body = response.json()
@@ -63,7 +63,7 @@ def index():
         #Spoonacular variables
         
         Cuisine = cuisine,
-        SpoonUrl = json.dumps(json_body["results"][randnum]["spoonacularSourceUrl"]),
+        SpoonUrl = json.dumps(json_body["results"][randnum]["spoonacularSourceUrl"]).replace("\"",""),
         Recipe = json.dumps(json_body["results"][randnum]["title"]).replace("\"",""),
         Servings = json.dumps(json_body["results"][randnum]["servings"]),
         ReadyTime = json.dumps(json_body["results"][randnum]["readyInMinutes"]),
@@ -75,12 +75,12 @@ def index():
 
 def getQuery(cuisine, title):
     title = title.replace(" ", " OR ")
-    query = cuisine+" food OR "+title
+    query = cuisine+" food -filter:retweets"
     return query
 
 def getTweets(query, count):
     tweets = []
-    response = api.search(query, count = 1, show_user = True, result_type = "recent",lang = "en")
+    response = api.search(query, count = count, show_user = True, result_type = "recent",lang = "en")
     for tweet in response:
         tweets.append(tweet)
     return tweets
