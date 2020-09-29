@@ -36,7 +36,7 @@ state = ['Italian','Chinese','Mexican','Greek','Indian','Japanese','Thai','Cajun
 @app.route('/')
 def index():
     rnum = random.randint(0,8)
-    count = 3
+    count = 1
     cuisine = state[rnum]
     response = requests.get(surl+"&cuisine="+state[rnum]+"&addRecipeInformation=true&number=20")
     json_body = response.json()

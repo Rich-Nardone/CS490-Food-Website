@@ -1,21 +1,96 @@
 body{
     font-family: 'Roboto', sans-serif;
     font-size: 28px;
+    color:white;
     background-color: green;
     text-align: center;
 }
-
+h1 {
+    margin: auto;
+    font-size: 30px; 
+    border-radius: 20px;
+    border-style: solid;
+    background-color:black;
+    color:white;
+    padding: 0.5em 0.2em 0.8em 0.5em;
+}
 ol{ 
     font-size: 18px;
     margin-left: 30px;
-    background-color: #039be5;
     font-family: 'Roboto', sans-serif;
     text-align: left;
 }
+.spoon li {
+    display: inline-block;
+    margin: auto;
+    font-size: 30px; 
+    border-radius: 20px;
+    border-style: dotted;
+    background-color:black;
+    color:white;
+    padding: 0.5em 0.2em 0.8em 0.5em;
+    
+}
+.ingredients h1 {
+    text-align:left;
+    display: inline-block;
+    margin: auto;
+    font-size: 30px; 
+    border-style: dotted;
+    border-radius: 20px;
+    background-color:black;
+    color:white;
+    padding: 0.5em 0.2em 0.8em 0.5em;
+}
+.ingredients li {
+    text-align:left;
+    display: inline-block;
+    margin: auto;
+    font-size: 20px; 
+    border-style: dotted;
+    border-radius: 20px;
+    background-color:black;
+    color:white;
+    padding: 0.5em 0.2em 0.8em 0.5em;
+}
+.tweet li {
+    display: inline-block;
+    margin: auto;
+    font-size: 30px; 
+    border-style:dashed;
+    border-radius: 20px;
+    background-color:black;
+    color:white;
+    padding: 0.8em 0.2em 0.8em 0.5em;
+    
+}
+.tweet ol {
+    border-style: dashed;
+    display: inline-block;
+    margin: auto;
+    font-size: 20px; 
+    border-radius: 20px;
+    background-color:black;
+    color:white;
+    padding: 0.5em 0.2em 0.8em 0.5em;
+    
+}
+li{
+    margin: auto;
+    text-align: left;
+    font-size: 20px; 
+    border-radius: 20px;
+    background-color:black;
+    color:white;
+}
 
-hr{
-    color: black;
-    background-color: black;
-    width:50%;
-    text-align:center;
+img{
+    margin: auto;
+    border-style: dotted;
+    border-radius: 20px;
+    background-color:black;
+    color:white;
+    padding: 0.8em 0.2em 0.8em 0.5em;
+    height:300px;
+    width:auto;
 }
