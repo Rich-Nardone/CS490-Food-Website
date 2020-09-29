@@ -17,26 +17,24 @@
         
         <div class="spoon">
             
-            <li>Recipe: {{ Recipe }}</li>
-            <a href={{ SpoonUrl }} target="_blank"><img src={{ ImageUrl }} alt="food" /></a>
+            <li>Recipe: {{ Recipe[randnum] }}</li>
+            <a href={{ SpoonUrl }} target="_blank"><img src={{ ImageUrl[randnum] }} alt="food" /></a>
             <li>Cuisine Origin: {{ Cuisine }}</li>
-            <li>ReadyTime: {{ ReadyTime }}</li>
-            <li>Servings: {{ Servings }}</li>
+            <li>ReadyTime: {{ ReadyTime[randnum] }}</li>
+            <li>Servings: {{ Servings[randnum] }}</li>
             
             <div class="ingredients">
                 <h1>Ingredients: </h1>
-                {% for i in range(0, ilen) %}
-                    <li>{{ Ingredients[i] }}</li>
+                {% for i in range(0, Ingredients[0][randnum]) %}
+                    <li>{{ Ingredients[1][randnum][i] }}</li>
                 {% endfor %}
             </div>
         </div>
         <div class="tweet">
             <ol>
-                {% for i in range(0, list_len) %}
-                    <li>{{ Users[i] }} tweeted:  </li>
-                    <li>"{{ Texts[i] }}"</li>
-                    <li> on {{ Times[i] }}</li>                
-                {% endfor %}
+                    <li>{{ Users[randomtweet] }} tweeted:  </li>
+                    <li>"{{ Texts[randomtweet] }}"</li>
+                    <li> on {{ Times[randomtweet] }}</li>                
             </ol>
         </div>
     </body>

@@ -30,56 +30,44 @@ spoonacular_key = os.environ['SPOON_KEY']
 surl = "https://api.spoonacular.com/recipes/complexSearch?apiKey={}".format(spoonacular_key)
 
 #Set of cuisines for complexSearch
-state = ['Italian','Chinese','Mexican','Greek','Indian','Japanese','Thai','Cajun','Caribbean','Irish','Korean']
+cuisines = ['Italian','Chinese','Mexican','Greek','Indian','Japanese','Thai','Cajun','Caribbean','Irish','Korean']
 
 
 @app.route('/')
 def index():
-    rnum = random.randint(0,8)
-    count = 1
-    cuisine = state[rnum]
-    response = requests.get(surl+"&cuisine="+state[rnum]+"&addRecipeInformation=true&number=20")
-    json_body = response.json()
-    while True:
-        randnum = random.randint(0,19)
-        try:
-            url = (json.dumps(json_body["results"][randnum]["image"])).replace("\"","")
-        except:
-            pass
-        else: 
-            break
-    recipeID = json.dumps(json_body["results"][randnum]["id"])
-    ingredients = getIngredients(recipeID)
-    title = json.dumps(json_body["results"][randnum]["title"]).replace("\"","")
-    query = getQuery(cuisine, title)
-    results = getTweets(query, count)
+    count = 5
+    rnum = random.randint(0,10)
+    cuisine = cuisines[rnum]
+    recipes = getRecipes(cuisine)
+    recipeIDs = getRecipeIDs(recipes)
+    results = getTweets(cuisine, count)
     return flask.render_template(
         "index.html",
-        #Tweet variables
+        #Spoonacular variables
+        randnum = random.randint(0,5),
+        Cuisine = cuisine,
+        SpoonUrl = getSpoonURLs(recipes),
+        Recipe = getTitles(recipes),
+        Servings = getServings(recipes),
+        ReadyTime = getReadyTimes(recipes),
+        ImageUrl = getImages(recipes),
+        Ingredients = getIngredients(recipeIDs),
+         #Tweet variables
         Texts = getTexts(results),
         Users = getUsers(results),
         Times = getTimes(results),
         list_len = count,
-        #Spoonacular variables
-        
-        Cuisine = cuisine,
-        SpoonUrl = json.dumps(json_body["results"][randnum]["spoonacularSourceUrl"]).replace("\"",""),
-        Recipe = json.dumps(json_body["results"][randnum]["title"]).replace("\"",""),
-        Servings = json.dumps(json_body["results"][randnum]["servings"]),
-        ReadyTime = json.dumps(json_body["results"][randnum]["readyInMinutes"]),
-        ImageUrl = (json.dumps(json_body["results"][randnum]["image"])).replace("\"",""),
-        Ingredients = ingredients,
-        ilen = len(ingredients)
+        randomtweet = random.randint(0,4)
         )
 
 
-def getQuery(cuisine, title):
-    title = title.replace(" ", " OR ")
+def getQuery(cuisine):
     query = cuisine+" food -filter:retweets"
     return query
 
-def getTweets(query, count):
+def getTweets(cuisine, count):
     tweets = []
+    query = getQuery(cuisine)
     response = api.search(query, count = count, show_user = True, result_type = "recent",lang = "en")
     for tweet in response:
         tweets.append(tweet)
@@ -113,18 +101,73 @@ def getTimes(results):
         times.append(holder)
     return times
 
-def getIngredients(ID):
-    iurl = "https://api.spoonacular.com/recipes/"+ID+"/ingredientWidget.json?apiKey={}".format(spoonacular_key)
-    response = requests.get(iurl)
-    json_body = response.json()
-    ingredients = []
-    for i in range(0,len(json_body["ingredients"])):
-        ingre = json.dumps(json_body["ingredients"][i]["name"])
-        ingre = ingre.replace("\"","")
-        ingredients.append(ingre)
-        
-    return ingredients
+def getIngredients(IDs):
+    ingred = []
+    Lengths = []
+    for ID in IDs:
+        iurl = "https://api.spoonacular.com/recipes/"+ID+"/ingredientWidget.json?apiKey={}".format(spoonacular_key)
+        response = requests.get(iurl)
+        json_body = response.json()
+        ingredients = []
+        Lengths.append(len(json_body["ingredients"]))
+        for i in range(0,len(json_body["ingredients"])):
+            ingre = json.dumps(json_body["ingredients"][i]["name"])
+            ingre = ingre.replace("\"","")
+            ingredients.append(ingre)
+        ingred.append(ingredients)
+    return Lengths, ingred
 
+  
+def getRecipes(cuisine):
+    response = requests.get(surl+"&cuisine="+cuisine+"&addRecipeInformation=true&number=6")
+    return response
+
+def getCuisine():
+    r = random.randint(0,10)
+    return r
+    
+def getRecipeIDs(response):
+    json_body = response.json()
+    IDs = []
+    for i in range(0,6):
+        IDs.append(json.dumps(json_body["results"][i]["id"]))
+    return IDs
+
+def getImages(response):
+    json_body = response.json()
+    images = []
+    for i in range(0,6):
+        images.append(json.dumps(json_body["results"][i]["image"]).replace("\"",""))
+    return images
+    
+def getTitles(response):
+    json_body = response.json()
+    titles = []
+    for i in range(0,6):
+        titles.append(json.dumps(json_body["results"][i]["title"]).replace("\"",""))
+    return titles
+    
+def getReadyTimes(response):
+    json_body = response.json()
+    times = []
+    for i in range(0,6):
+        times.append(json.dumps(json_body["results"][i]["readyInMinutes"]))
+    return times
+    
+def getServings(response):
+    json_body = response.json()
+    servings = []
+    for i in range(0,6):
+        servings.append(json.dumps(json_body["results"][i]["servings"]))
+    return servings
+    
+def getSpoonURLs(response):
+    json_body = response.json()
+    urls = []
+    for i in range(0,6):
+        urls.append(json.dumps(json_body["results"][i]["spoonacularSourceUrl"]).replace("\"",""))
+    return urls
+    
 app.run(
     port = int(os.getenv("PORT", 8080)),   
     host = os.getenv("IP", "0.0.0.0"),
