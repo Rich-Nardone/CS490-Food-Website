@@ -7,8 +7,14 @@ Twitter:
 	Once approved enter the portal and navigate to projects and apps.
 	Create a new app.
 	Click the key symbol to reveal keys and tokens.
+	*** These keys are private do not show them to others ***
 Heroku:
 	Sign up for heroku at heroku.com
+Spoonacular:
+	Sign up for Spoonacular api at https://spoonacular.com/food-api/console#Dashboard
+	Navigate to My Console then click Profile
+	Click the pink button Show/Hide API key to reveal your key
+	*** These keys are private do not show them to others ***
 
 Clone this repository: 
 	Use this command to clone repository: git clone http://www.github.com/NJIT-CS490/project1-rmn9
@@ -21,22 +27,28 @@ Detailed instructions get started:
 	pip install python-dotenv
 
 2. Create file called 'keys.env' and write to the file:
-   *** USE THESE VARIABLES AND FILE NAME EXACTLY DO NOT CHANGE **
-	export CONSUMER_KEY=''
-	export CONSUMER_SECRET=''
-	export TOKEN=''
-	export TOKEN_SECRET=''
+   *** USE THESE VARIABLES AND FILE NAME EXACTLY DO NOT CHANGE ***
+   *** Replace TODO in each line with its respective Twitter api key ***
+   *** Replace TODO in the line containing SPOON_KEY with your spoonacular api key ***
+	export CONSUMER_KEY='TODO'
+	export CONSUMER_SECRET='TODO'
+	export TOKEN='TODO'
+	export TOKEN_SECRET='TODO'
+	export SPOON_KEY='TODO'
 
+	
 3. In the terminal run the command:
 	python main.py
 	
 4. If on Cloud9 preview templates/index.html. This should render the HTML.
+	In the terminal hit CTRL+C to end the script in Cloud9
 
 5. Install heroku:
 	npm install -g heroku
 	heroku login -i
 	heroku create
 	git push heroku master
+
 6. Get heroku set up.
 	Navigate to your heroku dashboard at https://dashboard.heroku.com/apps
 	Click on your newly created app and navigate to settings.
@@ -47,13 +59,15 @@ Detailed instructions get started:
 		CONSUMER_SECRET
 		TOKEN
 		TOKEN_SECRET
-	Add your keys and tokens next to their respective variable names.
+		SPOON_KEY
+	Add your keys and tokens from your keys.env file next to their respective variable names.
 	
 7. Configure requirements.txt with all requirements needed to run your app.
 	For this app all thats needed is:
 		Flask
 		python-dotenv
 		tweepy
+
 8. Configure Procfile with the command needed to run your app.
 	For this app all thats needed is:
 		web: python main.py
@@ -62,18 +76,27 @@ Detailed instructions get started:
 	
 	
 Issues I had creating this app:
-	1. Major issue with github and heroku working together. When trying to push to heroku I would recieve fatal errors and my code would not push. 
-	   I recieved many error messages pushing and pulling from git aswell. I beleive it was human error from a error in the way I set up each. 
-	   I fixed this by starting a new repository and creating a new heroku app and setting it up all over again.
-	2. I also had issues parsing the tweepy api responses to get the information for each tweet. I was unable to get the specific time of the tweet.
-	   I fixed this by reading the documentation and figuring out that the times were correct but for UTC timezone not ETC.
+	1. I wanted to make the app more organized in terms of API calls and responses. The calls and responses crowded the top of my index function. I created functions 
+	   to organize my api calls for both twitter and spoonacular but the spoonacular functions were acting weird giving completely wrong data. I figured out I needed to 
+	   remove json.dumps() the getRecipes() function and use it in each function I called to retrieve spoonacular data. I had this error because of a lack of understanding 
+	   and experience working with json files in python. Reading up on some documentation solved my issues aswell as trial and error.
+	2. I had trouble with the ingredients section of the spoonacular response. This was before I had figured out the best way to parse through the spoonacular json response 
+	   in a function with the response as a parameter. I solved this by using another query in spoonacular which allows you to search for the ingredients of a recipe by
+	   its id tag. This fix and secondary search query using the ID may be irrelevant now that I have fixed the underlying issue which was the json.dumps problem but
+	   the code works fine with it.
+	3. Another issue I had trouble with was tweets displayed multiple times if the same cuisine was selected. Often times a new recipe would load on the screen but it would 
+	   be the same cuisine ie. Chinese but the tweet would be the same becuase I was searching for tweets based on the cuisine and I was only asking for one tweet. I fixed this by 
+	   reading through the Twitter API Docs and finding the search request and reading its optional parameters. One of the parameters I found useful was the count parameter which allowed 
+	   me to specify how many tweets I wanted in response. I experimented with different amounts of tweets and another paramter which allowed your to specify the type of tweet.
+	   The type of tweet parameter had three options 'popular','mixed' and 'recent'. Finally I put the tweets into an array and used a random number to select which tweet I would display
+	   on each load.
 
 Issues I am still having with this app:
-	1. Coding in HTML and styling with CSS is new to me so I am having trouble getting my code information to display correctly. I am also having trouble 
-	   figuring out the styling. I'm going to fix this by reading more documentation on CSS and HTML and most likely do an overhall of the website format and styles.
-	2. I am also having trouble navigating the tweepy api responses. I need to read the documentation on how to get the full tweet text adn I would like to have
-	   a better understanding of the contents of the JSON response so I can add more information about the tweet like a geotag. This will require me to just read
-	   more documentation and experiment.
-
-test
-test
+	1. After implementing final functions to organize my code and declutter the index() function I found my app in the c9 preview and browser preview load very slowly.
+	   I understand this issue could be fixed by hardware upgrades and deploying my app from a local machine instead of heroku. To fix this issue without hardware changing 
+	   I would go through my code and eliminate code which is unneccesary or restructure my code to use less function calls. That fix would shave little time off my load 
+	   speed. Another fix I would use would be eliminating the second spoonacular api call for ingredients and restruct the code to grab ingredients from the original response.
+	2. If I had more time I would also learn more about the twiter queries and how to format queries which would result in better tweets. Currently my queries just filter out 
+	   retweets and search for tweets containing a phrase cuisine+" food" substituting cuisine for a string identifying a specific food origin like American, Chinese, Indian, Greek.
+	   Twitter currently offers a variety of search operator to narrow or widen your search at https://developer.twitter.com/en/docs/twitter-api/v1/rules-and-filtering/overview/standard-operators
+	   I was expecting twitter to use regex for queries but after finding this out I would experiment with these operators because my tweets were sometimes off topic.

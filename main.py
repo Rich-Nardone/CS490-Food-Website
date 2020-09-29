@@ -32,7 +32,6 @@ surl = "https://api.spoonacular.com/recipes/complexSearch?apiKey={}".format(spoo
 #Set of cuisines for complexSearch
 cuisines = ['Italian','Chinese','Mexican','Greek','Indian','Japanese','Thai','Cajun','Caribbean','Irish','Korean']
 
-
 @app.route('/')
 def index():
     count = 5
@@ -52,7 +51,7 @@ def index():
         ReadyTime = getReadyTimes(recipes),
         ImageUrl = getImages(recipes),
         Ingredients = getIngredients(recipeIDs),
-         #Tweet variables
+        #Tweet variables
         Texts = getTexts(results),
         Users = getUsers(results),
         Times = getTimes(results),
