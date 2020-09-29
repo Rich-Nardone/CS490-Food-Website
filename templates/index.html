@@ -3,14 +3,23 @@
         <title>Spoonacular Review</title>
         <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet">
         <link rel="stylesheet" href={{ url_for("static", filename="styles.css") }} >
-        <div style="background-image: url('static/background.jpg');">
+        <style>
+            body {
+              background-image: url('static/wooden_background.jpg');
+              background-repeat: no-repeat;
+              background-attachment: fixed;
+              background-size: cover;
+            }
+        </style>
     </head>
     <body>
         <h1>Spoonacular Review</h1>
-        <a href={{ SpoonUrl }} target="_blank"><img src={{ ImageUrl }} alt="food" /></a>
+        
         <div class="spoon">
-            <li>Cuisine Origin: {{ Cuisine }}</li>
+            
             <li>Recipe: {{ Recipe }}</li>
+            <a href={{ SpoonUrl }} target="_blank"><img src={{ ImageUrl }} alt="food" /></a>
+            <li>Cuisine Origin: {{ Cuisine }}</li>
             <li>ReadyTime: {{ ReadyTime }}</li>
             <li>Servings: {{ Servings }}</li>
             
@@ -25,14 +34,14 @@
             <ol>
                 {% for i in range(0, list_len) %}
                     <li>{{ Users[i] }} tweeted:  </li>
-                    <ol>"{{ Texts[i] }}"</ol>
-                    <ol> on {{ Times[i] }}</ol>                
+                    <li>"{{ Texts[i] }}"</li>
+                    <li> on {{ Times[i] }}</li>                
                 {% endfor %}
             </ol>
         </div>
     </body>
     <footer> 
-        <h4> Created by Richard Nardone </h4>
-        <h5>Utilized Heroku, Twitter API and Spoonacular API</h5>
+        <h5>Created by Richard Nardone</h5>
+        <h5>Utilized Heroku, GitHub, Python, Flask, Twitter API and Spoonacular API</h5>
     </footer>
 </html>
